@@ -43,10 +43,12 @@ function getToken(request: Request): string | null {
   }
 
   // Try to get token from cookie
-  const cookieStore = cookies();
-  const cookieToken = cookieStore.get('token');
-  if (cookieToken) {
-    return cookieToken.value;
+  try {
+    const cookieStore = cookies();
+    return cookieStore.get('token')?.value || null;
+  } catch (error) {
+    console.error('Error reading cookies:', error);
+    return null;
   }
 
   return null;
