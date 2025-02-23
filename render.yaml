@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: emergency-alert-backend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run db:setup && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: emergency-alert-db
+          property: connectionString
+      - key: JWT_SECRET
+        sync: false
+      - key: GEOAPIFY_API_KEY
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_MESSAGING_SERVICE_SID
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+
+databases:
+  - name: emergency-alert-db
+    databaseName: emergency_alert
+    user: emergency_alert_user 
