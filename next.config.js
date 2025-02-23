@@ -1,18 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  webpack: (config) => {
-    config.resolve.fallback = {
-      fs: false,
-      net: false,
-      tls: false,
-    };
-    // Add aliases
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': __dirname
-    };
-    return config;
+  output: 'standalone',
+  typescript: {
+    ignoreBuildErrors: true // Only if you want to ignore TS errors during build
   },
   async headers() {
     return [

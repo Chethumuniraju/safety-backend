@@ -1,20 +1,14 @@
 services:
   - type: web
-    name: emergency-alert-backend
+    name: emergency-alert-system
     env: node
-    buildCommand: |
-      npm install --save-dev typescript @types/react @types/node @types/react-dom
-      npm install --legacy-peer-deps
-      npx prisma generate
-      npm run build
-    startCommand: npm run dev
+    buildCommand: npm install && npm run build
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: emergency-alert-db
-          property: connectionString
+        sync: false
       - key: JWT_SECRET
         sync: false
       - key: GEOAPIFY_API_KEY
@@ -23,12 +17,5 @@ services:
         sync: false
       - key: TWILIO_AUTH_TOKEN
         sync: false
-      - key: TWILIO_MESSAGING_SERVICE_SID
-        sync: false
       - key: TWILIO_FROM_NUMBER
-        sync: false
-
-databases:
-  - name: emergency-alert-db
-    databaseName: emergency_alert
-    user: emergency_alert_user 
+        sync: false 
