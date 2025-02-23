@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  password    String
+  email       String   @unique
+  phoneNumber String?  @map("phone_number")
+  createdAt   DateTime @default(now()) @map("created_at")
+  complaints  Complaint[]
+  contacts    EmergencyContact[]
+
+  @@map("users")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("admin")
+}
+
+model PoliceStation {
+  id          Int      @id @default(autoincrement())
+  name        String
+  area        String
+  city        String
+  state       String
+  pincode     String
+  phoneNumber String   @map("phone_number")
+  email       String?  @unique
+  password    String
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime @default(now()) @map("created_at")
+  complaints  Complaint[]
+
+  @@map("police_stations")
+}
+
+model Complaint {
+  id              Int           @id @default(autoincrement())
+  userId          Int
+  policeStationId Int
+  location        String
+  latitude        Float
+  longitude       Float
+  description     String
+  status          ComplaintStatus @default(PENDING)
+  emergencyContacts String?
+  address         String?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  user            User          @relation(fields: [userId], references: [id])
+  policeStation   PoliceStation @relation(fields: [policeStationId], references: [id])
+
+  @@map("complaints")
+}
+
+model EmergencyContact {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  name        String
+  phoneNumber String   @map("phone_number")
+  relation    String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("emergency_contacts")
+}
+
+enum ComplaintStatus {
+  PENDING
+  ACKNOWLEDGED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+} 

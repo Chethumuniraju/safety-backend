@@ -1,0 +1,303 @@
+USER AUTHENTICATION
+------------------
+POST /api/auth/user/signup
+Request:
+{
+    "username": "testuser",
+    "password": "password123",
+    "email": "test@example.com",
+    "phoneNumber": "1234567890"
+}
+Response:
+{
+    "message": "User created successfully",
+    "user": {
+        "id": 1,
+        "username": "testuser",
+        "email": "test@example.com",
+        "phoneNumber": "1234567890",
+        "createdAt": "2024-02-21T10:30:00.000Z"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3MDk4OTk4MDB9.EXAMPLE_TOKEN"
+}
+
+POST /api/auth/user/login
+Request:
+{
+    "username": "testuser",
+    "password": "password123"
+}
+Response:
+{
+    "message": "Login successful",
+    "user": {
+        "id": 1,
+        "username": "testuser",
+        "email": "test@example.com"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3MDk4OTk4MDB9.EXAMPLE_TOKEN"
+}
+
+ADMIN AUTHENTICATION
+-------------------
+POST /api/auth/admin/login
+Request:
+{
+    "username": "admin",
+    "password": "admin123"
+}
+Response:
+{
+    "message": "Login successful",
+    "admin": {
+        "id": 1,
+        "username": "admin",
+        "email": "admin@example.com"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA5ODk5ODAwfQ.EXAMPLE_ADMIN_TOKEN"
+}
+
+POLICE STATIONS (ADMIN ONLY)
+---------------------------
+POST /api/admin/police-stations?token=admin_token
+Request:
+{
+    "name": "Central Police Station",
+    "area": "Deccan",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "pincode": "411004",
+    "phoneNumber": "020-26123456",
+    "email": "central@pune.police.gov.in",
+    "password": "station123",
+    "latitude": 18.5204,
+    "longitude": 73.8567
+}
+Response:
+{
+    "message": "Police station created successfully",
+    "policeStation": {
+        "id": 1,
+        "name": "Central Police Station",
+        "area": "Deccan",
+        "city": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411004",
+        "phoneNumber": "020-26123456",
+        "email": "central@pune.police.gov.in",
+        "latitude": 18.5204,
+        "longitude": 73.8567,
+        "createdAt": "2024-02-21T10:30:00.000Z"
+    }
+}
+
+GET /api/admin/police-stations?token=admin_token
+Response:
+{
+    "message": "Police stations retrieved successfully",
+    "policeStations": [
+        {
+            "id": 1,
+            "name": "Central Police Station",
+            "area": "Deccan",
+            "city": "Pune",
+            "state": "Maharashtra",
+            "pincode": "411004",
+            "phoneNumber": "020-26123456",
+            "email": "central@pune.police.gov.in",
+            "latitude": 18.5204,
+            "longitude": 73.8567
+        }
+    ]
+}
+
+PUT /api/admin/police-stations/1?token=admin_token
+{
+    "name": "Updated Police Station",
+    "area": "New Area",
+    "phoneNumber": "020-26123457"
+}
+
+DELETE /api/admin/police-stations/1?token=admin_token
+
+EMERGENCY CONTACTS (USER)
+------------------------
+POST /api/user/contacts?token=user_token
+Request:
+{
+    "name": "Emergency Contact",
+    "phoneNumber": "1234567890",
+    "relation": "Family"
+}
+Response:
+{
+    "message": "Contact added successfully",
+    "contact": {
+        "id": 1,
+        "name": "Emergency Contact",
+        "phoneNumber": "1234567890",
+        "relation": "Family",
+        "createdAt": "2024-02-21T10:30:00.000Z"
+    }
+}
+
+GET /api/user/contacts?token=user_token
+Response:
+{
+    "message": "Contacts retrieved successfully",
+    "contacts": [
+        {
+            "id": 1,
+            "name": "Emergency Contact",
+            "phoneNumber": "1234567890",
+            "relation": "Family",
+            "createdAt": "2024-02-21T10:30:00.000Z"
+        }
+    ]
+}
+
+PUT /api/user/contacts/1?token=user_token
+{
+    "name": "Updated Contact",
+    "phoneNumber": "9876543210",
+    "relation": "Friend"
+}
+
+DELETE /api/user/contacts/1?token=user_token
+
+COMPLAINTS
+----------
+POST /api/complaints?token=user_token
+Request:
+{
+    "latitude": 18.5204,
+    "longitude": 73.8567,
+    "description": "Emergency situation",
+    "emergencyContacts": "1234567890,9876543210"
+}
+Response:
+{
+    "message": "Complaint registered successfully",
+    "complaint": {
+        "id": 1,
+        "userId": 1,
+        "policeStationId": 1,
+        "location": "18.5204,73.8567",
+        "latitude": 18.5204,
+        "longitude": 73.8567,
+        "description": "Emergency situation",
+        "status": "PENDING",
+        "emergencyContacts": "1234567890,9876543210",
+        "createdAt": "2024-02-21T10:30:00.000Z",
+        "updatedAt": "2024-02-21T10:30:00.000Z",
+        "user": {
+            "username": "testuser",
+            "email": "test@example.com",
+            "phoneNumber": "1234567890"
+        },
+        "policeStation": {
+            "name": "Central Police Station",
+            "area": "Downtown",
+            "city": "Mumbai",
+            "phoneNumber": "022-22621855",
+            "latitude": 18.9442,
+            "longitude": 72.8335
+        }
+    },
+    "distanceToStation": "2.34 km"
+}
+
+GET /api/complaints?token=user_token
+Response:
+{
+    "message": "Complaints retrieved successfully",
+    "complaints": [
+        {
+            "id": 1,
+            "userId": 1,
+            "policeStationId": 1,
+            "location": "18.5204,73.8567",
+            "description": "Emergency situation",
+            "status": "PENDING",
+            "emergencyContacts": "1234567890",
+            "createdAt": "2024-02-21T10:30:00.000Z",
+            "policeStation": {
+                "name": "Central Police Station",
+                "phoneNumber": "022-22621855",
+                "area": "Downtown"
+            }
+        }
+    ]
+}
+
+GET /api/admin/complaints?token=admin_token
+Response:
+{
+    "message": "Complaints retrieved successfully",
+    "complaints": [
+        {
+            "id": 1,
+            "userId": 1,
+            "policeStationId": 1,
+            "location": "18.5204,73.8567",
+            "description": "Emergency situation",
+            "status": "PENDING",
+            "emergencyContacts": "1234567890",
+            "createdAt": "2024-02-21T10:30:00.000Z",
+            "user": {
+                "id": 1,
+                "username": "testuser",
+                "email": "test@example.com",
+                "phoneNumber": "1234567890"
+            },
+            "policeStation": {
+                "name": "Central Police Station",
+                "area": "Downtown",
+                "city": "Mumbai",
+                "phoneNumber": "022-22621855"
+            }
+        }
+    ]
+}
+
+PUT /api/admin/complaints/1?token=admin_token
+Request:
+{
+    "status": "ACKNOWLEDGED"
+}
+Response:
+{
+    "message": "Complaint status updated successfully",
+    "complaint": {
+        "id": 1,
+        "status": "ACKNOWLEDGED",
+        "updatedAt": "2024-02-21T10:35:00.000Z"
+    }
+}
+
+NOTES:
+------
+1. All protected routes require token
+2. Token can be passed as:
+   - URL query: ?token=your_token
+   - Authorization header: Authorization: Bearer your_token
+   - Cookie: token=your_token
+
+3. Complaint Status Values:
+   - PENDING
+   - ACKNOWLEDGED
+   - IN_PROGRESS
+   - RESOLVED
+   - CLOSED
+
+4. Error Response Format:
+{
+    "message": "Error message",
+    "error": "Detailed error description"
+}
+
+Common Error Codes:
+- 400: Bad Request (Invalid input)
+- 401: Unauthorized (Invalid/missing token)
+- 404: Not Found
+- 500: Server Error 
