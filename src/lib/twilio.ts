@@ -2,7 +2,7 @@ import twilio from 'twilio';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const fromNumber = '+18144845149';  // Your Twilio phone number
+const fromNumber = process.env.TWILIO_FROM_NUMBER || '+18144845149';
 
 // Add logging for initialization
 console.log('Twilio Config:', {
@@ -11,10 +11,14 @@ console.log('Twilio Config:', {
   fromNumber
 });
 
+if (!accountSid || !authToken) {
+  console.error('Missing Twilio credentials');
+}
+
 const client = twilio(accountSid, authToken);
 
 export async function sendEmergencySMS(
-  to: string,
+  to: string | undefined,
   userName: string,
   location: string,
   description: string,
@@ -22,6 +26,12 @@ export async function sendEmergencySMS(
   address?: string
 ) {
   try {
+    // Validate phone number
+    if (!to) {
+      console.error('No phone number provided');
+      return null;
+    }
+
     // Add country code if not present
     const formattedNumber = to.startsWith('+') ? to : `+91${to}`;
 
@@ -63,8 +73,10 @@ export async function sendEmergencySMS(
       error: error?.message,
       errorCode: error?.code,
       errorStatus: error?.status,
-      moreInfo: error?.moreInfo
+      moreInfo: error?.moreInfo,
+      phoneNumber: to
     });
-    throw error;
+    // Return null instead of throwing to prevent crashing
+    return null;
   }
 } 

@@ -8,7 +8,7 @@
     "start": "next start -p $PORT",
     "create-admin": "ts-node scripts/create-admin.ts",
     "db:studio": "prisma studio",
-    "postinstall": "prisma generate && npm install @types/react @types/node --save-dev",
+    "postinstall": "npx prisma generate",
     "db:setup": "ts-node src/lib/db-setup.ts",
     "db:migrate": "prisma migrate deploy"
   },
@@ -19,14 +19,14 @@
     "next": "15.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "twilio": "^5.4.5"
+    "twilio": "^5.4.5",
+    "prisma": "^6.4.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
-    "prisma": "^6.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
