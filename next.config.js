@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Disable CSS handling since this is an API-only project
-  css: false,
-  // Disable client-side features
   webpack: (config) => {
     config.resolve.fallback = {
       fs: false,
