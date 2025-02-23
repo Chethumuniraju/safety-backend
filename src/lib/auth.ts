@@ -45,11 +45,10 @@ function getToken(request: Request): string | null {
   // Try to get token from cookie
   try {
     const cookieStore = cookies();
-    return cookieStore.get('token')?.value || null;
+    const token = cookieStore.get('token');
+    return token?.value || null;
   } catch (error) {
     console.error('Error reading cookies:', error);
     return null;
   }
-
-  return null;
 } 
