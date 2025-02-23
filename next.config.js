@@ -7,6 +7,11 @@ const nextConfig = {
       net: false,
       tls: false,
     };
+    // Add aliases
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': __dirname
+    };
     return config;
   },
   async headers() {
