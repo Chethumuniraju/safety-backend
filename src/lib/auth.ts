@@ -1,5 +1,6 @@
 import { jwtVerify, SignJWT } from 'jose';
 import { cookies } from 'next/headers';
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -44,7 +45,7 @@ function getToken(request: Request): string | null {
 
   // Try to get token from cookie
   try {
-    const cookieStore = cookies();
+    const cookieStore: ReadonlyRequestCookies = cookies();
     const token = cookieStore.get('token');
     return token?.value || null;
   } catch (error) {
